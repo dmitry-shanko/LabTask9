@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    ">
+<bean id="propertyConfigurer"
+class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="location" value="classpath:/properties/database.properties"/>
+</bean>
+
+	<bean id="cp" class="com.epam.tasknine.database.cp.ConnectionPool"
+		scope="singleton" destroy-method="clearConnectionQueue" init-method="init">
+		<property name="driver" value="${database.driver}"></property>
+		<property name="url" value="${database.url}"></property>
+		<property name="user" value="${database.user}"></property>
+		<property name="password" value="${database.password}"></property>
+		<property name="poolSize" value="15"></property>
+	</bean>
+	
+	<bean id="newsManager" class="com.epam.tasknine.faces.manager.NewsManagerImpl" autowire="byName" init-method="init"></bean>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="url" value="${database.url}" />
+		<property name="driverClassName" value="${database.driver}" />
+		<property name="username" value="${database.user}" />
+		<property name="password" value="${database.password}" />
+		<property name="removeAbandoned" value="true" />
+		<property name="initialSize" value="15" />
+		<property name="maxActive" value="2" />
+
+	</bean>
+
+	<bean id="newsDao" class="com.epam.tasknine.database.HibernateDaoImpl" 
+		init-method="init"> <constructor-arg> <value>com.epam.tasknine.model.News</value> 
+		</constructor-arg> <constructor-arg> <value>java.lang.Integer</value> </constructor-arg> 
+		<property name="sessionFactory" ref="sessionFactory" /> </bean>
+	<!-- <bean id="newsDao" class="com.epam.tasknine.database.JPADaoImpl" init-method="init"> 
+		<constructor-arg> <value>com.epam.tasknine.model.News</value> </constructor-arg> 
+		<constructor-arg> <value>java.lang.Integer</value> </constructor-arg> <property 
+		name="removeNamedQuery" value="news.remove" /> </bean> -->
+
+	<!-- <bean id="newsDao" class="com.epam.tasknine.database.JDBCNewsDaoImpl"
+		autowire="byName"></bean> -->
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mappingLocations">
+			<list>
+				<value>classpath:/hibernate/News.hbm.xml</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="debug">true</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.OracleDialect</prop>
+				<prop key="hibernate.cglib.use_reflection_optimizer">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.enable_lazy_load_no_trans">true</prop>
+				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory
+				</prop>
+				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<prop key="hibernate.cache.use_query_cache">true</prop>
+				<prop key="hibernate.generate_statistics">true</prop>
+				<prop key="hibernate.cache.use_structured_entries">true</prop>
+				<prop key="hibernate.cache.provider_configuration_file_resource_path">classpath:/ehcache.xml</prop>
+			</props>
+		</property>
+		<property name="namingStrategy">
+			<bean class="com.epam.tasknine.database.util.CustomNamingStrategy" />
+		</property>
+	</bean>
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceProviderClass" value="org.hibernate.ejb.HibernatePersistence" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="com.epam.tasknine.model" />
+		<property name="jpaPropertyMap">
+			<map>
+				<entry key="hibernate.show_sql" value="false" />
+				<entry key="hibernate.format_sql" value="true" />
+				<entry key="debug" value="true" />
+				<entry key="hibernate.cglib.use_reflection_optimizer" value="true" />
+				<entry key="hibernate.dialect" value="org.hibernate.dialect.OracleDialect" />
+				<entry key="hibernate.hbm2ddl.auto" value="update" />
+				<entry key="hibernate.enable_lazy_load_no_trans" value="true" />
+				<entry key="hibernate.cache.use_second_level_cache" value="true" />
+				<entry key="hibernate.cache.use_query_cache" value="true" />
+				<entry key="hibernate.ejb.naming_strategy"
+					value="com.epam.tasknine.database.util.CustomNamingStrategy" />
+				<entry key="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
+				<entry key="hibernate.cache.use_structured_entries" value="true" />
+				<entry key="hibernate.cache.provider_configuration_file_resource_path"
+					value="classpath:/ehcache.xml" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="newsFacade" class="com.epam.tasknine.presentation.facade.NewsFacadeImpl">
+		<property name="newsDao" ref="newsDao"></property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager"> 
+		<property name="sessionFactory" ref="sessionFactory" /> </bean>
+
+<!-- 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean> -->
+
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:advisor id="employeeFacadeAdvisor"
+			pointcut="execution(* com.epam.tasknine.presentation.facade.NewsFacadeImpl.*(..))"
+			advice-ref="txAdvice" />
+	</aop:config>
+
+</beans>

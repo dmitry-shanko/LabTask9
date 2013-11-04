@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+<body>
+
+	<ui:composition>
+
+		<h:form>
+			<span class="contentNewsTitle"><h:commandLink
+					action="#{newsBean.newsManager.newsList()}">
+					<h:outputLabel value="#{msg['label.newslist.news']}" />
+				</h:commandLink></span>&nbsp;&gt;&gt;&nbsp;
+			<h:outputLabel value="#{msg['label.newslist.newslist']}" />
+			<br />
+			<br />
+		</h:form>
+		<h:form rendered="#{newsBean.newsManager.listPage()}">
+			<h:outputText value="#{msg['label.newslist.nonews']}"
+				rendered="#{empty newsBean.newsManager.currentNewsList}" />
+
+			<h:dataTable value="#{newsBean.newsManager.currentNewsList}"
+				var="curNew" styleClass="newsListTable">
+
+				<h:column>
+					<div class="newsListTableTitle">
+						<h:outputText value="#{curNew.title}" />
+					</div>
+					<div class="news_table_news_brief">
+						<h:outputText value="#{curNew.brief}" />
+					</div>
+				</h:column>
+				<h:column>
+					<div align="right">
+						<div class="news_table_news_date">
+							<h:outputText value="#{curNew.newsDate.getTime()}">
+								<f:convertDateTime pattern="#{msg['date.pattern']}"
+									timeZone="GMT+3" />
+							</h:outputText>
+						</div>
+						<div class="newsListTableLinks">
+							<h:commandLink
+								action="#{newsBean.newsManager.newsView(curNew.id)}"
+								value="#{msg['label.newslist.view']}" />
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<h:commandLink
+								action="#{newsBean.newsManager.newsEdit(curNew.id)}"
+								value="#{msg['label.newslist.edit']}" />
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<h:selectBooleanCheckbox id="checkIndex" styleClass="checkIndex"
+								value="#{newsBean.newsManager.checkBoxesIndexes[curNew.id]}" />
+
+						</div>
+
+					</div>
+				</h:column>
+
+			</h:dataTable>
+			<table class="newsListTable">
+				<tr>
+					<td class="afterTableButtons"><h:commandButton
+							action="#{newsBean.newsManager.newsDelete()}"
+							value="#{msg['label.newslist.delete']}"
+							rendered="#{not empty newsBean.newsManager.currentNewsList}"
+							onclick="return deleteGroupOfNews()" /></td>
+				</tr>
+			</table>
+		</h:form>
+		<br />
+	</ui:composition>
+</body>
+</html>

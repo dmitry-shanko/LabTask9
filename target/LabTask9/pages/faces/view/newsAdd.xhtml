@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<body>
+
+	<ui:composition>
+<h:form rendered="#{newsBean.newsManager.editPage()}" prependId="false">
+		<span class="contentNewsTitle"><h:commandLink
+				action="#{newsBean.newsManager.newsList()}">
+				<h:outputLabel value="#{msg['label.newsedit.news']}" />
+			</h:commandLink></span>
+&gt;&gt;
+<h:outputLabel value="#{msg['label.newsedit.title']}" />
+		<br />
+		<br />
+
+			<table>
+				<tr>
+					<td class="newsTableTitles"><h:outputLabel
+							value="#{msg['news.title']}" /></td>
+					<td><h:panelGrid>
+							<h:inputTextarea rows="1" cols="100" id="newsTitle"
+								value="#{newsBean.newsManager.newsToEdit.title}" />
+						</h:panelGrid></td>
+				</tr>
+				<tr>
+					<td><h:outputLabel value="#{msg['news.date']}" /></td>
+					<td><h:panelGrid>
+							<h:inputText size="10" id="newsDate"
+								value="#{newsBean.newsManager.newsDateString}" />
+						</h:panelGrid></td>
+				</tr>
+				<tr>
+					<td><h:outputLabel value="#{msg['news.brief']}" /></td>
+					<td><h:panelGrid>
+							<h:inputTextarea rows="2" cols="100" id="newsBrief"
+								value="#{newsBean.newsManager.newsToEdit.brief}" />
+						</h:panelGrid></td>
+				</tr>
+				<tr>
+					<td><h:outputLabel value="#{msg['news.content']}" /></td>
+					<td><h:panelGrid>
+							<h:inputTextarea rows="20" cols="100" id="newsContent"
+								value="#{newsBean.newsManager.newsToEdit.content}" />
+						</h:panelGrid></td>
+				</tr>
+			</table>
+			<table class="newsListTable">
+				<tr>
+					<td class="afterTableButtons"><h:commandButton
+							action="#{newsBean.newsManager.newsAdd()}"
+							value="#{msg['news.save']}"  onclick="return validateAddEditNewsForm()"/></td>
+					<td><h:commandButton
+							action="#{newsBean.newsManager.newsCancel()}"
+							value="#{msg['news.cancel']}" /></td>
+				</tr>
+			</table>
+		</h:form>
+
+	</ui:composition>
+
+</body>
+
+</html>

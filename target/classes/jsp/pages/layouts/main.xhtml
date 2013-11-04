@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<f:view locale="#{newsBean.newsManager.currentLocale}">
+
+	<h:head>
+		<title>#{msg['layout.title']}</title>
+		<h:outputStylesheet name="layout.css" library="css" />
+		<h:outputScript name="scripts.js" library="js" />
+		<h:outputScript name="jsMessages.jsp" library="js" />
+	</h:head>
+
+	<h:body>
+
+		<div class="layout">
+
+			<table class="header" width="100%">
+				<tr>
+					<td><ui:insert name="header">
+							<ui:include src="/pages/faces/header.xhtml" />
+						</ui:insert></td>
+				</tr>
+			</table>
+
+			<table class="content">
+				<tr>
+					<td class="menu"><ui:insert name="menu">
+							<ui:include src="/pages/faces/menu.xhtml" />
+						</ui:insert></td>
+					<td class="body"><ui:insert name="content">
+						</ui:insert></td>
+				</tr>
+			</table>
+
+			<table class="footer">
+				<tr>
+					<td><ui:insert name="footer">
+							<ui:include src="/pages/faces/footer.xhtml" />
+						</ui:insert></td>
+				</tr>
+			</table>
+
+		</div>
+
+	</h:body>
+
+</f:view>
+
+</html>

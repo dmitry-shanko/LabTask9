@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+<body>
+	<ui:composition>
+
+		<div id="header_title">
+			<h:outputLabel value="#{msg['header.main']}" />
+		</div>
+
+		<div id="header_lang">
+			<h:form>
+				<h:commandLink action="#{newsBean.newsManager.changeLocale('en')}">
+					<h:outputLabel value="#{msg['header.english']}" />
+				</h:commandLink>
+&nbsp;&nbsp;&nbsp;
+<h:commandLink action="#{newsBean.newsManager.changeLocale('ru')}">
+					<h:outputLabel value="#{msg['header.russian']}" />
+				</h:commandLink>
+			</h:form>
+		</div>
+
+	</ui:composition>
+</body>
+</html>

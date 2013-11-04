@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+<body>
+	<ui:composition>
+
+
+		<div id="menu">
+
+			<p id="menu_title">
+				<h:outputLabel value="#{msg['menu.head']}" />
+			</p>
+
+			<div id="menu_list">
+				<h:form>
+				&nbsp;&nbsp;&nbsp;&nbsp; <h:commandLink
+								action="#{newsBean.newsManager.newsList()}">
+								<h:graphicImage value="../../resources/img/disc.jpg"/><h:outputLabel value="#{msg['menu.newslist']}" />
+							</h:commandLink>
+						<br/>
+						&nbsp;&nbsp;&nbsp;&nbsp; <h:commandLink
+								action="#{newsBean.newsManager.newsAdd()}">
+								<h:graphicImage value="../../resources/img/disc.jpg"/>
+								<h:outputLabel value="#{msg['menu.newsadd']}" />
+							</h:commandLink>
+						<br/>
+					
+				</h:form>
+			</div>
+
+		</div>
+
+	</ui:composition>
+</body>
+</html>

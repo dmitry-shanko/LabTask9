@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+<body>
+	<ui:composition>
+		<h:form>
+			<span class="contentNewsTitle"><h:commandLink
+					action="#{newsBean.newsManager.newsList()}">
+					<h:outputLabel value="#{msg['label.newsview.news']}" />
+				</h:commandLink></span>&nbsp;&gt;&gt;&nbsp;
+			<h:outputLabel value="#{msg['label.newsview.view']}" />
+			<br />
+			<br />
+			<h:outputText value="#{msg['label.newsview.nonews']}"
+				rendered="#{empty newsBean.newsManager.newsToView}" />
+		</h:form>
+		<h:form rendered="#{newsBean.newsManager.viewPage()}">
+			<h:form
+				rendered="#{not empty newsBean.newsManager.newsToView}">
+				<table>
+					<tr>
+						<td class="newsTableTitles"><span class="NewsViewTitle">
+								<h:outputLabel value="#{msg['news.title']}" />
+						</span></td>
+						<td><h:outputText
+								value="#{newsBean.newsManager.newsToView.title}"
+								rendered="#{not empty newsBean.newsManager.newsToView}" /></td>
+					</tr>
+					<tr>
+						<td><span class="NewsViewTitle"> <h:outputLabel
+									value="#{msg['news.date']}" />
+						</span></td>
+						<td><h:outputText
+								value="#{newsBean.newsManager.newsToView.newsDate.getTime()}"
+								rendered="#{not empty newsBean.newsManager.newsToView}">
+								<f:convertDateTime pattern="#{msg['date.pattern']}"  timeZone="GMT+3"/>
+							</h:outputText></td>
+					</tr>
+					<tr>
+						<td><span class="NewsViewTitle"> <h:outputLabel
+									value="#{msg['news.brief']}" />
+						</span></td>
+						<td><h:outputText
+								value="#{newsBean.newsManager.newsToView.brief}"
+								rendered="#{not empty newsBean.newsManager.newsToView}" /></td>
+					</tr>
+					<tr>
+						<td><span class="NewsViewTitle"> <h:outputLabel
+									value="#{msg['news.content']}" />
+						</span></td>
+						<td><h:outputText
+								value="#{newsBean.newsManager.newsToView.content}"
+								rendered="#{not empty newsBean.newsManager.newsToView}" /></td>
+					</tr>
+				</table>
+
+
+				<table class="newsListTable">
+					<tr>
+						<td class="afterTableButtons"><h:commandButton
+								action="#{newsBean.newsManager.newsEdit(newsBean.newsManager.newsToView.id)}"
+								value="#{msg['news.edit']}"
+								rendered="#{not empty newsBean.newsManager.newsToView}" /></td>
+						<td><h:commandButton
+								action="#{newsBean.newsManager.newsDelete(newsBean.newsManager.newsToView.id)}"
+								value="#{msg['news.delete']}"
+								rendered="#{not empty newsBean.newsManager.newsToView}"
+								onclick="return confirmDialog()" /></td>
+					</tr>
+				</table>
+			</h:form>
+		</h:form>
+	</ui:composition>
+</body>
+</html>
